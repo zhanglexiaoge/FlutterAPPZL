@@ -19,7 +19,7 @@ class SwiperView extends StatelessWidget {
            return Image.network("${swiperDataList[index].bigImg}",fit:BoxFit.fill);
          },
          itemCount: swiperDataList.length,
-         pagination: new SwiperPagination(),
+         pagination: new SwiperPagination(alignment: Alignment.bottomCenter),
          autoplay: true,
        ),
     );
