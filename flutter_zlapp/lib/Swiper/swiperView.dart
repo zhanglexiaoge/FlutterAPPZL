@@ -10,18 +10,26 @@ class SwiperView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (swiperDataList == null) {
-      swiperDataList = List <BannerModel>();
-    }
-    return Container(
-       height: 280.0,
+      return Container(
+       height: 200.0,
+       child: Image.asset('assets/images/babner_default@2x.png'),
+     );
+    }else {
+      return Container(
+       height: 200.0,
        child: Swiper(
          itemBuilder: (BuildContext context, int index){
-           return Image.network("${swiperDataList[index].bigImg}",fit:BoxFit.fill);
+           return FadeInImage.assetNetwork(
+             placeholder: 'assets/images/babner_default@2x.png',
+             image: "${swiperDataList[index].bigImg}",
+             fit:BoxFit.fill
+           );
          },
          itemCount: swiperDataList.length,
          pagination: new SwiperPagination(alignment: Alignment.bottomCenter),
          autoplay: true,
        ),
-    );
+     );
+    }
   }
 }
