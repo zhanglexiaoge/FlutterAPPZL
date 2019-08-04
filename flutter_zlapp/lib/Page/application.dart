@@ -5,7 +5,7 @@ import 'package:flutter_zlapp/Model/bannerApiModel/staff_infro_model.dart';
 import 'package:flutter_zlapp/Swiper/swiperView.dart';
 import 'package:flutter_zlapp/Page/cellView/customMenusView.dart';
 import 'package:flutter_zlapp/UI/section_view.dart';
-import 'package:flutter_zlapp/Tool/Utils.dart';
+
 class ApplicationPage extends StatefulWidget {
   @override
   _ApplicationPageState createState() => _ApplicationPageState();
@@ -34,28 +34,20 @@ class _ApplicationPageState extends State<ApplicationPage> {
    //获取个人信息数据
    Future <void> _postStaffInfroModel ()async {
      staffInfroModel infroModel =  await BannerApi.getInstance().postSelfInfro(context, false);
-    //  if (infroModel != null) {
-    //    List listmenusGroup = [{"title":"考勤模块","icon":"assets/images/menu_punch@2x.png"},
-    //    {"title":"请假","icon":"assets/images/menu_leave@2x.png"},
-    //    {"title":"思维导图","icon":"assets/images/menu_xmind@2x.png"},
-    //    {"title":"办公文档","icon":"assets/images/menu_hword@2x.png"},
-    //    {"title":"会议","icon":"assets/images/menu_meeting@2x.png"},
-    //    {"title":"收藏","icon":"menu_collect@2x.png"},
-    //    {"title":"他山石","icon":"assets/images/menu_punch@2x.png"},
-    //    {"title":"公司文档","icon":"assets/images/menu_article@2x.png"},
-    //    {"title":"公司制度","icon":"assets/images/menu_program@2x.png"}];
-    //    setState(() {
-    //      menusList = listmenusGroup;
-    //    });
-    //  }
      //List rolemenus = infroModel.self.roleMenu;
      //根据权限分组 查看 rolemenus 包含哪些权限
      
      setState(() {
-      List listmenusGroup = [{"title":"考勤模块","icon":"assets/images/menu_punch@2x.png"},{"title":"请假","icon":"assets/images/menu_leave@2x.png"}];
+      List listmenusGroup = [
+        {"title":"考勤模块","icon":"assets/images/menu_punch@2x.png"},
+        {"title":"请假","icon":"assets/images/menu_leave@2x.png"}];
       Map menusGroup = {"title":"考勤模块","data":listmenusGroup};
       this.menusList.add(menusGroup);
-      List listmenusSecondGroup = [{"title":"思维导图","icon":"assets/images/menu_xmind@2x.png"},{"title":"办公文档","icon":"assets/images/menu_hword@2x.png"},{"title":"会议","icon":"assets/images/menu_meeting@2x.png"},{"title":"收藏","icon":"menu_collect@2x.png"}];
+      List listmenusSecondGroup = [
+        {"title":"思维导图","icon":"assets/images/menu_xmind@2x.png"},
+        {"title":"办公文档","icon":"assets/images/menu_hword@2x.png"},
+        {"title":"会议","icon":"assets/images/menu_meeting@2x.png"},
+        {"title":"收藏","icon":"assets/images/menu_collect@2x.png"}];
       Map menusSecondGroup = {"title":"办公软件","data":listmenusSecondGroup };
       this.menusList.add(menusSecondGroup);
       List listmenusthreeGroup = [{"title":"他山石","icon":"assets/images/menu_punch@2x.png"},{"title":"公司文档","icon":"assets/images/menu_article@2x.png"},{"title":"公司制度","icon":"assets/images/menu_program@2x.png"}];
@@ -80,30 +72,10 @@ class _ApplicationPageState extends State<ApplicationPage> {
      }else {
        return ListView(
          physics: const BouncingScrollPhysics(),
-         children: <Widget>[
-           SwiperView(swiperDataList: this.bannerList),
-
-           SectionView(this.menusList[0]['title'],
-              //onPressed: () => pushNewPage(context, MovieHotPage())
-              onPressed: (){
-
-              },
-            ),
-            Container(
-            padding: EdgeInsets.all(6.0),
-            child: Wrap(
-              spacing: 5,
-              runSpacing: 5,
-              children: _getmeusGridView(this.menusList[0]['data']),
-            ),
-          ),
-
-         ],
-
+         children: _getmeusItem(this.menusList),
        );
      }
   }
-
 
   Widget getLoadingWidget(
     {String text: '加载中...', Color bgColor: const Color(0x4b000000)}) {
@@ -131,17 +103,35 @@ class _ApplicationPageState extends State<ApplicationPage> {
                         child: Text(text, style: TextStyle(fontSize: 12.0)))
                   ]))));
  }
-
+ List <Widget> _getmeusItem (List list) {
+   List <Widget> listmeusItem = [];
+   listmeusItem.add(SwiperView(swiperDataList: this.bannerList));
+   for (var item in list) {
+     listmeusItem.add( SectionView(item['title'],
+              onPressed: (){
+                 //点击事件
+              },
+      ));
+      listmeusItem.add(Container(
+            padding: EdgeInsets.all(30),
+            child: Wrap(
+              spacing: 15,
+              runSpacing: 15,
+              children: _getmeusGridView(item['data']),
+            ),
+          ));
+   }
+   return listmeusItem;
+ }
  List <Widget> _getmeusGridView (List list) {
    List <Widget> listGridView = [];
    for (var item in list) {
      listGridView.add(CustomMenusView(iconData: item['icon'],title: item['title'],onTap: (){
-
+    
      },));
    }
    return listGridView;
  }
-
 }
 
 

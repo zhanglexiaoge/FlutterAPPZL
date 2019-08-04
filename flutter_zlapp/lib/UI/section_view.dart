@@ -41,23 +41,23 @@ class SectionView extends StatelessWidget {
                     Container(
                         width: title.length * 20.0, height: 2, color: textColor)
                   ]),
-              Offstage(
-                  child: FlatButton(
-                      color: backgroundColor,
-                      onPressed: onPressed,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text('$more',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                    color: textColor)),
-                            SizedBox(height: 3),
-                            Icon(CupertinoIcons.forward,
-                                size: 14, color: textColor)
-                          ])),
-                  offstage: hiddenMore)
+              // Offstage(
+              //     child: FlatButton(
+              //         color: backgroundColor,
+              //         onPressed: onPressed,
+              //         child: Row(
+              //             mainAxisAlignment: MainAxisAlignment.center,
+              //             children: <Widget>[
+              //               Text('$more',
+              //                   style: TextStyle(
+              //                       fontWeight: FontWeight.bold,
+              //                       fontSize: 14,
+              //                       color: textColor)),
+              //               SizedBox(height: 3),
+              //               Icon(CupertinoIcons.forward,
+              //                   size: 14, color: textColor)
+              //             ])),
+              //     offstage: hiddenMore)
             ]));
   }
 }
