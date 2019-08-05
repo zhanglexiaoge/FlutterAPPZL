@@ -12,6 +12,8 @@ class BannerApi extends HttpReq  {
 
   /// 获取个人信息的接口
   static const selfInfroPathUrlPath = postSelfInfroPath; 
+  //获取公司文档
+  static const postSysfilePath = postsysfilePath;
   BannerApi._();
 
   static BannerApi _instance;
@@ -34,7 +36,7 @@ class BannerApi extends HttpReq  {
   }
 
  //获取个人信息 数据 staffInfroModel
-  Future <staffInfroModel> postSelfInfro (BuildContext context, bool showProgress) async{
+  Future <staffInfroModel> postSelfInfro (BuildContext context, bool showProgress ) async{
   Map<String, dynamic> param = {'device':'iPhone Simulator','version':'ios.3.1.7.28'}; 
   ResultData resultData = await post(selfInfroPathUrlPath,params: param,context:context,showLoad: showProgress);
   staffInfroModel model ;
@@ -43,5 +45,13 @@ class BannerApi extends HttpReq  {
   }
   return model;
   }
-
+  
+  //获取公司文档
+  Future getsysfile (BuildContext context, bool showProgress,int page) async{
+     Map<String, dynamic> param = {'page':page}; 
+     ResultData resultData = await get(postSysfilePath,params: param,context:context,showLoad: showProgress);
+     if (resultData.isSuccess()) {
+       print(resultData.data);
+     }
+  }
 }

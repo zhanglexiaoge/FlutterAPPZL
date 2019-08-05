@@ -4,3 +4,5 @@ const BaseserviceUrl = "https://test-hantalk.hanmaker.com";
 const bannerUrlPath = "/api/staff/app/banner";
 //获取 自身权限信息
 const postSelfInfroPath = "/api/v2/self/info/mobile";
+//获取公司文档
+const postsysfilePath = "/api/tool/document/category";
