@@ -14,16 +14,18 @@ class CustomMenusView extends StatefulWidget {
 class _CustomMenusViewState extends State<CustomMenusView> {
   @override
   Widget build(BuildContext context) {
-   //double width = (Utils.width - 45 *2 - 30 * 2 ) / 3;
-   //double height = width * 383 / 270;
     return GestureDetector(
       onTap: this.widget.onTap,
-      child: Column(
-        
-        children: <Widget>[
-          Image.asset(this.widget.iconData,height: 75,width: 75),
-          Text(this.widget.title == null ? "" : this.widget.title, style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold,color: Colors.black),),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 5.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(this.widget.iconData,height: 40,width: 40),
+            SizedBox(height: 8.0),
+            Text(this.widget.title == null ? "" : this.widget.title, style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold,color: Colors.black)),
+          ],
+        ),
       ),
     );
   }

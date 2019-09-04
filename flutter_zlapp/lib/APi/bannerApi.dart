@@ -5,6 +5,7 @@ import 'package:flutter_zlapp/Config/result_data.dart';
 import 'package:flutter_zlapp/Model/bannerApiModel/banner_model.dart';
 import 'package:flutter_zlapp/Config/serviceUrl.dart';
 import 'package:flutter_zlapp/Model/bannerApiModel/staff_infro_model.dart';
+import 'package:flutter_zlapp/Model/bannerApiModel/sys_file_model.dart';
 
 class BannerApi extends HttpReq  {
   /// 获取banner的接口
@@ -47,11 +48,13 @@ class BannerApi extends HttpReq  {
   }
   
   //获取公司文档
-  Future getsysfile (BuildContext context, bool showProgress,int page) async{
+  Future  <sysFileModel >getsysfile (BuildContext context, bool showProgress,int page) async{
      Map<String, dynamic> param = {'page':page}; 
      ResultData resultData = await get(postSysfilePath,params: param,context:context,showLoad: showProgress);
+     sysFileModel fileModel;
      if (resultData.isSuccess()) {
-       print(resultData.data);
+       fileModel =sysFileModel.fromJson(resultData.data);
      }
+     return fileModel;
   }
 }

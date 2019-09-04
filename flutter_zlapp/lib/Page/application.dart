@@ -24,7 +24,6 @@ class _ApplicationPageState extends State<ApplicationPage> {
     super.initState();
     _getBannerData();
     _postStaffInfroModel();
-    _getData();
   }
 
   //获取轮播图数据
@@ -35,10 +34,6 @@ class _ApplicationPageState extends State<ApplicationPage> {
     setState(() {
       bannerList = banner;
     });
-  }
- //获取公司文档
-  Future<void> _getData() async {
-      await BannerApi.getInstance().getsysfile(context, false,1);
   }
   //获取个人信息数据
   Future<void> _postStaffInfroModel() async {
@@ -117,10 +112,12 @@ class _ApplicationPageState extends State<ApplicationPage> {
                       Padding(
                           padding: EdgeInsets.only(top: 20.0),
                           child: Text(text, style: TextStyle(fontSize: 12.0)))
-                    ]))));
+                    ])))      
+              );
   }
 
   List<Widget> _getmeusItem(List list) {
+    double width = (Utils.width - 40 * 3 - 30)/ 3;
     List<Widget> listmeusItem = [];
     listmeusItem.add(SwiperView(swiperDataList: this.bannerList));
     for (var item in list) {
@@ -131,10 +128,11 @@ class _ApplicationPageState extends State<ApplicationPage> {
         },
       ));
       listmeusItem.add(Container(
-        padding: EdgeInsets.only(left: 30,right: 30,top: 10,bottom: 10),
+        padding: EdgeInsets.only(left: 15,right: 15,top: 10,bottom: 10),
         color: Colors.white,
         child: Wrap(
-          spacing: 30,
+          direction: Axis.horizontal,
+          spacing: width,
           runSpacing: 10,
           children: _getmeusGridView(item['data']),
         ),
@@ -153,7 +151,7 @@ class _ApplicationPageState extends State<ApplicationPage> {
           if (item['title'] == '公司文档') {
             Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
                       return new SysfileWidget();
-                    }));
+            }));
           } else {
 
           }
