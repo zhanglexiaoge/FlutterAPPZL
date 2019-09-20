@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zlapp/APi/bannerApi.dart';
 import 'package:flutter_zlapp/Model/bannerApiModel/sys_file_model.dart';
-
+import 'package:flutter_zlapp/Tool/date_util.dart';
+import 'package:flutter_zlapp/Page/applicationPage/sysfile/updateView.dart';
 enum LoadingStatus {
   //正在加载中
   Loading_loading,
@@ -37,14 +38,6 @@ class _SysfileWidgetState extends State<SysfileWidget> {
         setState(() {
           page++;
         });
-      //   if (page > countPage ) {
-      //     setState(() {
-      //      showMore = false;
-      //     });
-      //     return;
-      //  }else {
-      //    _getSysfileData();
-      //  } 
       _getSysfileData();
     }
    });
@@ -111,14 +104,25 @@ Widget _item(BuildContext context, int index) {
      child: new Column(
        children: <Widget>[
         Container(
-           child: Text(list[index].title,style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold,color: Colors.black)),
+          //softWrap: false 不换行 maxLines: 10, //最大行数
+           child: Text(list[index].title,textAlign:TextAlign.left,maxLines: 1,style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold,color: Colors.black )),
+           alignment: Alignment.topLeft,
          ),
         Container (
           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          height: 60,
           child: Row (
             children: <Widget>[
-              Text(list[index].content,style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold,color: Colors.black)),
-              Image.asset(list[index].thumbPic,height: 40,width: 40),
+              new Expanded(
+                child: Text(list[index].content,textAlign:TextAlign.left,softWrap:true,overflow: TextOverflow.ellipsis,maxLines: 3, style: TextStyle(fontSize: 13.0,color: Colors.black)),
+              ),
+              FadeInImage.assetNetwork(
+                 placeholder: 'assets/images/babner_default@2x.png',
+                 image: "${list[index].thumbPic}",
+                 fit:BoxFit.fill,
+                 height: 60,
+                 width: 60
+              ),
             ],
           ),
         ),
@@ -126,40 +130,24 @@ Widget _item(BuildContext context, int index) {
           margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
           child: Row (
             children: <Widget>[
-              Text(list[index].updateTime.toString(),style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold,color: Colors.black)),
-              Text(list[index].pv.toString(),style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold,color: Colors.black)),
+              UpdateView(iconPath:'assets/images/doc_icon_time@2x.png',title: DateUtil.formatTimelineToStr(list[index].updateTime)),
+               Container(
+                 height: 14.0,
+                 width: 15.0,
+               ),
+              UpdateView(iconPath:'assets/images/doc_icon_read@2x.png',title:(list[index].pv.toString() + "浏览")) ,
             ],
           ),
         ),
+       Container(
+        height: 10,
+        margin: EdgeInsets.fromLTRB(0, 5, 0, 0),
+        color: Colors.cyan,
+       ),
        ],
      ),
    );
 }
-
-
-  /**
-   * 加载更多时显示的组件,给用户提示
-   */
-  Widget _getMoreWidget() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              '加载中...',
-              style: TextStyle(fontSize: 16.0),
-            ),
-            CircularProgressIndicator(
-              strokeWidth: 1.0,
-            )
-          ],
-        ),
-      ),
-    );
-  }
   @override
   void dispose() {
   _scrollController.dispose();//监听器不用了要横着放
