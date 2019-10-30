@@ -19,7 +19,7 @@ class _TabarWidgetState extends State<TabarWidget> {
   /*
    * 存放三个页面，跟fragmentList一样
    */
-  var _pageList;
+  var _pageList = new List<StatefulWidget>();
 
   /*
    * 根据选择获得对应的normal或是press的icon
@@ -70,13 +70,20 @@ class _TabarWidgetState extends State<TabarWidget> {
     ];
 }
   @override
-  
   Widget build(BuildContext context) {
     //初始化数据
     initData();
     return Scaffold( //脚手架
-       body: _pageList[_selectedIndex],
-       bottomNavigationBar: new BottomNavigationBar(
+       //body: _pageList[_selectedIndex],
+       body: IndexedStack(index: _selectedIndex,children: _pageList),
+       bottomNavigationBar: _getNavigationBar(),
+    );
+  }
+/*
+   * 创建底部导航栏
+   */
+  BottomNavigationBar _getNavigationBar() {
+    return new BottomNavigationBar(
          items: <BottomNavigationBarItem> [
            new BottomNavigationBarItem(
              icon: getTabIcon(0), title: getTabTitle(0)
@@ -94,11 +101,19 @@ class _TabarWidgetState extends State<TabarWidget> {
          iconSize: 24.0,
          //点击事件
           onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
+           _pageChange(index);
           },
-       ),
-    );
+       );
   }
+/*
+   * 底部导航栏状态转换
+   */
+  void _pageChange(int index) {
+    setState(() {
+      if (_selectedIndex != index) {
+        _selectedIndex = index;
+      }
+    });
+  }
+
 }

@@ -14,11 +14,12 @@ class ApplicationPage extends StatefulWidget {
   _ApplicationPageState createState() => _ApplicationPageState();
 }
 
-class _ApplicationPageState extends State<ApplicationPage> {
+class _ApplicationPageState extends State<ApplicationPage> with AutomaticKeepAliveClientMixin<ApplicationPage>{
   String homePageContent = '正在获取数据';
   List<BannerModel> bannerList = [];
-
   List menusList = [];
+  @override
+  bool get wantKeepAlive => true;
   @override
   void initState() {
     super.initState();
