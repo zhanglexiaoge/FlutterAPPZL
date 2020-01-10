@@ -3,7 +3,6 @@ import 'package:flutter_zlapp/Page/home.dart';
 import 'package:flutter_zlapp/Page/application.dart';
 import 'package:flutter_zlapp/Page/mine.dart';
 
-
 //快捷 生成代码 stful
 
 class TabarWidget extends StatefulWidget {
@@ -15,7 +14,8 @@ class TabarWidget extends StatefulWidget {
 class _TabarWidgetState extends State<TabarWidget> {
   int _selectedIndex = 0;
   var tabImages;
-  var appBarTitles = ['首页', '发现', '我的'];
+  var appBarTitles = ['首页', '新闻', '我的'];
+  PageController _controller = PageController(initialPage: 0);
   /*
    * 存放三个页面，跟fragmentList一样
    */
@@ -43,7 +43,12 @@ class _TabarWidgetState extends State<TabarWidget> {
           style: new TextStyle(fontSize: 14.0, color: const Color(0xff515151)));
     }
   }
-  
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
   /*
    * 根据image路径获取图片
    */
@@ -74,9 +79,27 @@ class _TabarWidgetState extends State<TabarWidget> {
     //初始化数据
     initData();
     return Scaffold( //脚手架
-       //body: _pageList[_selectedIndex],
-       body: IndexedStack(index: _selectedIndex,children: _pageList),
-       bottomNavigationBar: _getNavigationBar(),
+      // body: IndexedStack(index: _selectedIndex,children: _pageList),
+        body:_buildBodyWidget(),
+        bottomNavigationBar: _getNavigationBar(),
+    );
+  }
+
+  Widget _buildBodyWidget() {
+    return PageView.builder(
+      controller: _controller,
+      itemCount:  _pageList.length,
+      physics: NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        return  _pageList[index];
+      },
+      onPageChanged: (index) {
+        if (index != _controller) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        }
+      },
     );
   }
 /*
@@ -98,22 +121,14 @@ class _TabarWidgetState extends State<TabarWidget> {
          type: BottomNavigationBarType.fixed,
          //默认选中首页
          currentIndex: _selectedIndex,
-         iconSize: 24.0,
+         iconSize: 20.0,
          //点击事件
           onTap: (index) {
-           _pageChange(index);
+           //_pageChange(index);
+           _controller.jumpToPage(index);
+
           },
        );
-  }
-/*
-   * 底部导航栏状态转换
-   */
-  void _pageChange(int index) {
-    setState(() {
-      if (_selectedIndex != index) {
-        _selectedIndex = index;
-      }
-    });
   }
 
 }

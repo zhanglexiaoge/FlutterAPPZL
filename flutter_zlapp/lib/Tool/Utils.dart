@@ -43,4 +43,5 @@ class Utils {
     MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
     return mediaQuery.padding.top;
   }
+
 }

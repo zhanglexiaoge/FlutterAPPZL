@@ -44,7 +44,7 @@ class ResultData {
       return false;
     }
   }
-  
+
   mDebugPrint(String log) {
     if (NetConfig.DEBUG) {
       debugPrint(log);
