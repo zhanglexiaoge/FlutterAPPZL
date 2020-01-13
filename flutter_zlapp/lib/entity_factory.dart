@@ -10,7 +10,7 @@ class EntityFactory {
     } else if (T.toString() == "OnePageListModelEntity") {
       return OnePageListModelEntity.fromJson(json) as T;
     } else if (T.toString() == "OnepageitemModelEntity") {
-      return OnepageitemModelEntity.fromJson(json) as T;
+      return OnePageItemEntity.fromJson(json) as T;
     } else if (T.toString() == "HomeModelEntity") {
       return HomeModelEntity.fromJson(json) as T;
     } else if (T.toString() == "LoginModelEntity") {
