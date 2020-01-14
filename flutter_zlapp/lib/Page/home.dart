@@ -11,6 +11,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_zlapp/Page/Home/electricity.dart';
 import 'package:flutter_zlapp/Page/Home/oneApp.dart';
 import 'package:flutter_zlapp/Tool/CustomDialog/LoadingDialog.dart';
+import 'package:flutter_zlapp/Tool/application/application.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -37,7 +38,6 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   void initState() {
     // TODO: implement initState
     super.initState();
-    //getHomeData();
   }
 
   Future <void> getHomeData() async {
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   /*扫一扫*/
   Widget _headerMenus(BuildContext context) {
     List<Widget> items = [];
-    List menus  = ['OneApp','付款码','红包/卡券','骑车'];
+    List menus  = ['OneApp','详情页面','红包/卡券','骑车'];
     menus.forEach((menustring){
       items.add(_itemMenus(context, menustring,'https://s0.meituan.net/bs/fe-web-meituan/fa5f0f0/img/logo.png'));
     });
@@ -256,6 +256,21 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 MaterialPageRoute(
                   builder: (context) => OneAppPage(),
                 ));
+          }else if(title == '详情页面') {
+            //详情页面
+            String message = "json1222";
+            String hexCode = "#FFFFFF";
+            String result = "1111111";
+            //*********参数不能包含中文
+            String route = "/detail?message=$message&color_hex=$hexCode";
+            if (result != null) {
+              route = "$route&result=$result";
+            }
+            print('route >>>>>>' + route);
+            Application.router.navigateTo(context, route).then((jsonStr){
+               print('>>>>>>  ' + jsonStr);
+            });
+
           }
         },
         child: Column(

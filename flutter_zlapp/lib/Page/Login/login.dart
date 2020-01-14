@@ -1,18 +1,13 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_zlapp/Config/serviceUrl.dart';
 import 'dart:ui';
-import 'package:flutter_zlapp/Tool/colors.dart';
 import 'package:flutter_zlapp/Tool/timerUtil.dart';
-
 import 'package:flutter_zlapp/Tool/HTTP/HttpUtil.dart';
-import 'package:flutter_zlapp/Config/serviceUrl.dart';
-import 'package:flutter_zlapp/Tabar/tabar.dart';
 import 'package:flutter_zlapp/Model/userModel/userModel.dart';
 import 'package:provider/provider.dart';
-
 import 'package:flutter_zlapp/Tool/CustomDialog/LoadingDialog.dart';
+import 'package:flutter_zlapp/Tool/application/application.dart';
+import 'package:flutter_zlapp/Router/routes.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -402,7 +397,8 @@ class _LoginViewState extends State<LoginView> {
       if(value != null){
         //Provider.of<PlayListModel>(context).user = value;
         //NavigatorUtil.goHomePage(context);
-        Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => TabarWidget()), (route) => route == null);
+        //Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => TabarWidget()), (route) => route == null);
+        Application.router.navigateTo(context, Routes.tabbarpage,clearStack: true);
       }
     },onError: (error) {
       Loading.hideLoading(context);

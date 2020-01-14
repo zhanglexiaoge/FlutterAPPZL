@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zlapp/Tool/application/application.dart';
 import 'package:flutter_zlapp/Model/userModel/userModel.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_zlapp/Tabar/tabar.dart';
-import 'package:flutter_zlapp/Page/Login/login.dart';
+import 'package:flutter_zlapp/Router/routes.dart';
+
 
 class SplashPage extends StatefulWidget {
   @override
@@ -11,6 +11,7 @@ class SplashPage extends StatefulWidget {
 }
 //广告页是204
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
+
   AnimationController _logoController;
   Tween _scaleTween;
   CurvedAnimation _logoAnimation;
@@ -44,9 +45,10 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     //判断是否登录
     if (userModel.loginModel != null) {
       //token存在 登录成功
-      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => TabarWidget()), (route) => route == null);
-    } else
-      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginView()), (route) => route == null);
+      Application.router.navigateTo(context, Routes.tabbarpage,clearStack: true);
+    } else {
+      Application.router.navigateTo(context, Routes.login, clearStack: true);
+    }
   }
 
   @override

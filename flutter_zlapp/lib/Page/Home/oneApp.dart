@@ -7,7 +7,7 @@ import 'package:flutter_zlapp/Page/Home/oneAPPPage/allPage.dart';
 import 'package:flutter_zlapp/Page/Home/oneAPPPage/mePage.dart';
 import 'package:flutter_zlapp/Page/Home/toolTabar_list_event/toolTabar_list_event.dart';
 import 'package:flutter_zlapp/Page/Home/appData/app.dart';
-import 'package:flutter_zlapp/Page/Home/route/oneAppRoute.dart';
+
 
 
 void main() {
@@ -131,8 +131,6 @@ class _OneAppPageState extends State<OneAppPage> {
         ),
       ),
 
-      ///绑定路由
-      onGenerateRoute: oneAppRoute,
     );
   }
 }

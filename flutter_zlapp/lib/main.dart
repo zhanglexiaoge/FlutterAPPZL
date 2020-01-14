@@ -4,8 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:fluro/fluro.dart';
 import 'package:flutter_zlapp/Model/userModel/userModel.dart';
 import 'package:flutter_zlapp/Page/splashPage/splashPage.dart';
+import 'package:flutter_zlapp/Router/routes.dart';
+import 'package:flutter_zlapp/Tool/application/application.dart';
 void main() {
   if (Platform.isAndroid) {
     /*控制状态栏底色*/
@@ -13,6 +16,10 @@ void main() {
     SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
+  final router = Router();
+  Routes.configureRoutes(router);
+  Application.router = router;
+
   runApp(
     MultiProvider(
         providers: [
@@ -28,7 +35,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
   return RefreshConfiguration (
      child:  MaterialApp(
-      home: SplashPage(),
+       debugShowCheckedModeBanner: false,
+       home: SplashPage(),
+       onGenerateRoute: Application.router.generator,
      ),
       headerBuilder: () => ClassicHeader(
           height: 45.0,
@@ -47,7 +56,6 @@ class MyApp extends StatelessWidget {
     ),
       hideFooterWhenNotFull: true
    );
-
   }
 
 }
