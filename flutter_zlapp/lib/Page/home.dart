@@ -12,6 +12,7 @@ import 'package:flutter_zlapp/Page/Home/electricity.dart';
 import 'package:flutter_zlapp/Page/Home/oneApp.dart';
 import 'package:flutter_zlapp/Tool/CustomDialog/LoadingDialog.dart';
 import 'package:flutter_zlapp/Tool/application/application.dart';
+import 'package:fluro/fluro.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -258,6 +259,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 ));
           }else if(title == '详情页面') {
             //详情页面
+            TransitionType transitionType = TransitionType.native;
             String message = "json1222";
             String hexCode = "#FFFFFF";
             String result = "1111111";
@@ -267,7 +269,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
               route = "$route&result=$result";
             }
             print('route >>>>>>' + route);
-            Application.router.navigateTo(context, route).then((jsonStr){
+            Application.router.navigateTo(context, route,transition:transitionType).then((jsonStr){
                print('>>>>>>  ' + jsonStr);
             });
 
