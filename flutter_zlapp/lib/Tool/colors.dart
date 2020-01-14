@@ -28,4 +28,5 @@ class Colours {
   static const Color green_e5 = Color(0xffe5e5e5); //<!--204-->
 
   static const Color green_de = Color(0xffdedede);
+  static const Color color_dddd = Color(0xFFDDDDDD);
 }

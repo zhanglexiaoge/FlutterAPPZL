@@ -10,6 +10,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_zlapp/Page/Home/electricity.dart';
 import 'package:flutter_zlapp/Page/Home/oneApp.dart';
+import 'package:flutter_zlapp/Tool/CustomDialog/LoadingDialog.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -31,24 +32,27 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
 
   final RefreshController _refreshController = RefreshController(
-      initialRefresh: false);
+      initialRefresh: true);
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getHomeData();
+    //getHomeData();
   }
 
   Future <void> getHomeData() async {
+    Loading.showLoading(context);
     //'http://www.devio.org/io/flutter_app/json/home_page.json',
     HttpUtil.instance.get('/io/flutter_app/json/home_page.json',
         customBaseUrl: 'https://www.devio.org').then((data) {
+          Loading.hideLoading(context);
       homeModel = HomeModelEntity.fromJson(data);
       //加载数据
       for (int i = 0;i < 20; i ++) {
         staggeredList.add(i);
       }
       updateData(homeModel);
+    },onError: (error){
     });
   }
 

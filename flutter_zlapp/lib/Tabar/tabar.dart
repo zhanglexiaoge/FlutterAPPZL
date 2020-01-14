@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zlapp/Page/home.dart';
-import 'package:flutter_zlapp/Page/application.dart';
+import 'package:flutter_zlapp/Page/application11.dart';
 import 'package:flutter_zlapp/Page/mine.dart';
 
 //快捷 生成代码 stful

@@ -510,4 +510,29 @@ class DateUtil {
         (now.millisecondsSinceEpoch - old.millisecondsSinceEpoch <=
             7 * 24 * 60 * 60 * 1000);
   }
+
+  ///根据当前传入月份返回上一个月份
+  ///格式: yyyy-MM
+  ///nowMonth: DateUtil.formatDate(DateTime.now(), format: DataFormats.y_mo)
+  static String getLastMonth(String nowMonth) {
+    int yyyy = int.parse(nowMonth.split('-')[0]);
+    int MM = int.parse(nowMonth.split('-')[1]);
+    if (MM > 1) {
+      return "$yyyy-${MM > 10 ? MM - 1 : "0${MM - 1}"}";
+    } else {
+      return "${yyyy - 1}-12";
+    }
+  }
+  ///根据当前传入月份返回下一个月份
+  ///格式: yyyy-MM
+  ///nowMonth: DateUtil.formatDate(DateTime.now(), format: DataFormats.y_mo)
+  static String getNextMonth(String nowMonth) {
+    int yyyy = int.parse(nowMonth.split('-')[0]);
+    int MM = int.parse(nowMonth.split('-')[1]);
+    if (MM > 11) {
+      return "${yyyy +1}-01";
+    } else {
+      return "$yyyy-${MM >= 9 ? MM + 1 : "0${MM + 1}"}";
+    }
+  }
 }

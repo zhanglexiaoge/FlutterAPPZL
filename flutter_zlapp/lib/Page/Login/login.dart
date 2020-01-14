@@ -1,18 +1,18 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_zlapp/Config/serviceUrl.dart' as prefix0;
-
+import 'package:flutter_zlapp/Config/serviceUrl.dart';
 import 'dart:ui';
 import 'package:flutter_zlapp/Tool/colors.dart';
 import 'package:flutter_zlapp/Tool/timerUtil.dart';
-import 'package:flutter_zlapp/Tool/nslog.dart';
+
 import 'package:flutter_zlapp/Tool/HTTP/HttpUtil.dart';
 import 'package:flutter_zlapp/Config/serviceUrl.dart';
-import 'package:flutter_zlapp/Model/logIn/login_model_entity.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_zlapp/Page/home.dart';
 import 'package:flutter_zlapp/Tabar/tabar.dart';
+import 'package:flutter_zlapp/Model/userModel/userModel.dart';
+import 'package:provider/provider.dart';
+
+import 'package:flutter_zlapp/Tool/CustomDialog/LoadingDialog.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -131,7 +131,7 @@ class _LoginViewState extends State<LoginView> {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
             child: ListView(
-              children: loginWidgets(),
+              children: loginWidgets(context),
             ),
           ),
         ],
@@ -140,7 +140,7 @@ class _LoginViewState extends State<LoginView> {
   }
 
     // 登录页视图
-    List<Widget> loginWidgets() {
+    List<Widget> loginWidgets(BuildContext context) {
       MediaQueryData mediaQuery = MediaQuery.of(context);
       double screenHeight = mediaQuery.size.height;
       double loginIconTop = screenHeight <= 667 ? 80 : 106;
@@ -184,7 +184,26 @@ class _LoginViewState extends State<LoginView> {
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: loginButton(),
+                //child: loginButton(),
+                child: Consumer<UserModel>(
+                   builder: (BuildContext context, UserModel value, Widget child) {
+                     return  FlatButton(
+                       disabledColor: Colors.blue.withOpacity(0.1),  //按钮禁用时的颜色
+                       disabledTextColor: Colors.black,     //按钮禁用时的文本颜色
+                       textColor:isLoginEnable?Colors.white:Colors.black.withOpacity(0.2),       //文本颜色
+                       color: isLoginEnable ?Color(0xff44c5fe):Colors.grey.withOpacity(0.1),       //按钮的颜色
+                       splashColor: isLoginEnable?Colors.white.withOpacity(0.1):Colors.transparent,
+                       shape: StadiumBorder(side: BorderSide.none),
+                       onPressed: (){
+                         usernameFocusNode.unfocus();
+                         passwordFocusNode.unfocus();
+                         verifyFocusNode.unfocus();
+                         loginAction(context,value);
+                       },
+                       child: Text('登录',style: TextStyle(fontSize: 13,),),
+                     );
+                   },
+                ),
               ),
             ],
           ),
@@ -376,43 +395,20 @@ class _LoginViewState extends State<LoginView> {
   }
 
 
-  Widget loginButton() {
-    return FlatButton(
-      disabledColor: Colors.blue.withOpacity(0.1),  //按钮禁用时的颜色
-      disabledTextColor: Colors.black,     //按钮禁用时的文本颜色
-      textColor:isLoginEnable?Colors.white:Colors.black.withOpacity(0.2),       //文本颜色
-      color: isLoginEnable ?Color(0xff44c5fe):Colors.grey.withOpacity(0.1),       //按钮的颜色
-      splashColor: isLoginEnable?Colors.white.withOpacity(0.1):Colors.transparent,
-      shape: StadiumBorder(side: BorderSide.none),
-      onPressed: (){
-        usernameFocusNode.unfocus();
-        passwordFocusNode.unfocus();
-        verifyFocusNode.unfocus();
-        loginAction();
-      },
-      child: Text('登录',style: TextStyle(fontSize: 13,),),
-    );
-  }
-
-  Future<void> loginAction() async {
-    Map<String, dynamic> params = {"username": userName,"password":password};
-    HttpUtil.instance.post(loginOld,params: params).then((data) {
-      print('data: ' + data.toString());
-      LoginModelEntity loginModel = LoginModelEntity.fromJson(data);
-      _saveuserModel(loginModel.hcAccessToken);
-    },onError: (error){
-
+  Future<void> loginAction( BuildContext context, UserModel value ) async {
+    Loading.showLoading(context);
+    value.login(context, userName, password, verify).then((loginModel) {
+      Loading.hideLoading(context);
+      if(value != null){
+        //Provider.of<PlayListModel>(context).user = value;
+        //NavigatorUtil.goHomePage(context);
+        Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => TabarWidget()), (route) => route == null);
+      }
+    },onError: (error) {
+      Loading.hideLoading(context);
     });
   }
-  Future <void> _saveuserModel(String token) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('token',token);
-    print('token:  ' + prefs.getString('token'));
-    Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => TabarWidget()), (route) => route == null);
 
-//    prefs.remove(key); //删除指定键
-//    prefs.clear();//清空键值对
-  }
 
 
 

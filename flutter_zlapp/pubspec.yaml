@@ -46,6 +46,10 @@ dependencies:
 #  那么这一讲给大家讲的 event_bus 主要是实现不同组件之间的数据传值，以及在一个组件中
 #  执行另一个组件的方法。
   event_bus: ^1.1.0
+  #Flutter 的日期选择器控件，iOS 样式。
+  flutter_cupertino_date_picker: ^1.0.12
+  #添加Provider依赖 状态管理
+  provider: ^2.0.1+1
 
 
 

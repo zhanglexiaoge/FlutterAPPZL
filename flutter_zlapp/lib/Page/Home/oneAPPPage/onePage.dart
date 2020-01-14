@@ -9,6 +9,7 @@ import 'package:flutter_zlapp/Page/Widget/loadingwWidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_zlapp/Page/Home/appData/app.dart'; //获取页面数据 可以用多个页面来传值
 import 'package:flutter_zlapp/Page/Home/toolTabar_list_event/toolTabar_list_event.dart';
+import 'package:flutter_zlapp/Page/Home/oneAPPPage/onePageList/onePageListView.dart';
 
 class OnePage extends StatefulWidget {
   OnePage({Key key}) : super(key: key);
@@ -23,6 +24,7 @@ class _OnePageState extends State<OnePage> with TickerProviderStateMixin{
 //  Animation<double> animation;//该对象是当前动画的状态，例如动画是否开始，停止，前进，后退。但是绘制再屏幕上的内容不知道
   List<String> _oneList = [];
   List<OnePageItemDataContentList> _data = List();
+  ScrollController scrollController = new ScrollController ();
   final RefreshController _refreshController = RefreshController(
       initialRefresh: false);
   bool _isShowBody = true; //隐藏子视图 默认隐藏
@@ -34,6 +36,17 @@ class _OnePageState extends State<OnePage> with TickerProviderStateMixin{
   void initState() {
     super.initState();
     initAnimation();
+
+   scrollController.addListener(() {
+     print('偏移量>>>>>' + scrollController.position.pixels.toString() );
+      // 如果滑动到底部
+      if (scrollController.position.pixels <= 0) {
+        // do something
+        App.eventBus.fire(toolTabar_list_event(true)); // 隐藏 Tabbar
+      }else {
+        App.eventBus.fire(toolTabar_list_event(false)); //显示 Tabbar
+      }
+    });
 
     getIdOneList(false);
   }
@@ -148,10 +161,11 @@ class _OnePageState extends State<OnePage> with TickerProviderStateMixin{
 
     ),
     body: Stack(
+      //越在后面层级越高
     // Offstage是控制组件隐藏/可见的组件，如果感觉有些单调功能不全，我们可以使用Visibility，Visibility也是控制子组件隐藏/可见的组件。不同是的Visibility有隐藏状态是否留有空间、隐藏状态下是否可调用等功能。
       children: <Widget>[
-        Visibility(
-            visible:!_isShowBody,
+        Offstage(
+            offstage: !_isShowBody,
             child:SmartRefresher(
               enablePullUp: false,
               enablePullDown: true,
@@ -161,23 +175,39 @@ class _OnePageState extends State<OnePage> with TickerProviderStateMixin{
                 getIdOneList(false);
                 _refreshController.refreshCompleted();
               },),
-             //	不可见时是否维持状态
-             maintainState: true,
          ),
            Visibility(
              visible:!_isShowBody,
-             child:Text('data'),
+             child:OnePageListView(),
              //	不可见时是否维持状态
-             maintainState: false,
+             maintainState: true,
            ),
         ],
 
     ), //叠加视图),
-     ) );
+     ),
+      onWillPop: () async {
+               ///监听返回键
+               if (_isShowBody) {
+                  ///当前显示首页
+                  return true;
+                } else {
+                  ///当前显示往期列表
+                  setState(() {
+                    _isShowBody = !_isShowBody;
+                  });
+                  App.eventBus.fire(toolTabar_list_event(!_isShowBody));
+                  changeOpacity(!_isShowBody);
+               }
+               return false;
+
+      },
+    );
   }
 
   Widget itemListView(BuildContext context) {
     return CustomScrollView (
+      controller: scrollController,
       slivers: <Widget>[
           SliverList(
             delegate: new SliverChildBuilderDelegate((BuildContext context, int index) {
