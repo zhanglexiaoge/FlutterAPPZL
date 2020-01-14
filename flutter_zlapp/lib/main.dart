@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'Tabar/tabar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io';
@@ -14,7 +13,6 @@ void main() {
     SystemUiOverlayStyle(statusBarColor: Colors.transparent);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
-
   runApp(
     MultiProvider(
         providers: [
@@ -24,17 +22,10 @@ void main() {
         ],
         child: MyApp(),
     ));
-
-
 }
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-//    _validateLogin().then((v){
-//       if(v == false) {
-//         Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginView()), (route) => route == null);
-//       }
-//    });
   return RefreshConfiguration (
      child:  MaterialApp(
       home: SplashPage(),
@@ -58,17 +49,6 @@ class MyApp extends StatelessWidget {
    );
 
   }
-
-//  Future <bool>_validateLogin() async{
-//    SharedPreferences prefs = await SharedPreferences.getInstance();
-//    String token = prefs.getString('token');
-//    print('token ===' + token);
-//    if(token == null) {
-//      return true;
-//    }else {
-//      return false;
-//    }
-//  }
 
 }
 
