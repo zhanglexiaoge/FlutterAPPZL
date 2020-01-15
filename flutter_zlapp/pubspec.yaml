@@ -49,7 +49,7 @@ dependencies:
   #Flutter 的日期选择器控件，iOS 样式。
   flutter_cupertino_date_picker: ^1.0.12
   #添加Provider依赖 状态管理
-  provider: ^2.0.1+1
+  provider: ^3.0.0+1
   #路由跳转
   fluro: ^1.5.1
 

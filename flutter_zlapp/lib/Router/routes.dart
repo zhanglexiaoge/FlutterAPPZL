@@ -8,6 +8,7 @@ class Routes {
   static String tabbarpage = "/tabbarpage";
   static String login = "/login";
   static String detail = "/detail";
+  static String facemanage = "/facemanage";
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = new Handler(
@@ -19,6 +20,7 @@ class Routes {
     router.define(login, handler: loginHandler);
     router.define(tabbarpage, handler: homeHandler);
     router.define(detail, handler: detailHandler);
+    router.define(facemanage, handler: facemanageHandler);
   }
 
 }

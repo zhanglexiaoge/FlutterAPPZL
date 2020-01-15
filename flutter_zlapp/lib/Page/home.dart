@@ -224,7 +224,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   /*扫一扫*/
   Widget _headerMenus(BuildContext context) {
     List<Widget> items = [];
-    List menus  = ['OneApp','详情页面','红包/卡券','骑车'];
+    List menus  = ['OneApp','表情商店','红包/卡券','骑车'];
     menus.forEach((menustring){
       items.add(_itemMenus(context, menustring,'https://s0.meituan.net/bs/fe-web-meituan/fa5f0f0/img/logo.png'));
     });
@@ -257,7 +257,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                 MaterialPageRoute(
                   builder: (context) => OneAppPage(),
                 ));
-          }else if(title == '详情页面') {
+          }else if(title == '表情商店') {
             //详情页面
             TransitionType transitionType = TransitionType.native;
             String message = "json1222";

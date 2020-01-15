@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zlapp/Tool/application/application.dart';
-import 'package:flutter_zlapp/Model/userModel/userModel.dart';
+import 'package:flutter_zlapp/Model/provider/userModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_zlapp/Router/routes.dart';
 

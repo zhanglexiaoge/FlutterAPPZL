@@ -3,7 +3,7 @@ import 'package:flutter_zlapp/Config/serviceUrl.dart';
 import 'dart:ui';
 import 'package:flutter_zlapp/Tool/timerUtil.dart';
 import 'package:flutter_zlapp/Tool/HTTP/HttpUtil.dart';
-import 'package:flutter_zlapp/Model/userModel/userModel.dart';
+import 'package:flutter_zlapp/Model/provider/userModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_zlapp/Tool/CustomDialog/LoadingDialog.dart';
 import 'package:flutter_zlapp/Tool/application/application.dart';

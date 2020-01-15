@@ -4,6 +4,7 @@ import 'package:flutter_zlapp/Page/detailPage/detailPage.dart';
 import 'package:flutter_zlapp/Page/splashPage/splashPage.dart';
 import 'package:flutter_zlapp/Page/Login/login.dart';
 import 'package:flutter_zlapp/Tabar/tabar.dart';
+import 'package:flutter_zlapp/Page/detailPage/faceManage.dart';
 
 
 // splash 页面 广告页
@@ -30,4 +31,9 @@ var detailHandler = new Handler(
       String result = params["result"]?.first;
       Color color = Color(0xFFFFFFFF);
       return DetailPage(message: message,color: color,result: result);
+    });
+//跳转到表情管理页 facemanage
+var facemanageHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+      return FaceManageSet();
     });

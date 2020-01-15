@@ -5,11 +5,17 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:fluro/fluro.dart';
-import 'package:flutter_zlapp/Model/userModel/userModel.dart';
+import 'package:flutter_zlapp/Model/provider/userModel.dart';
 import 'package:flutter_zlapp/Page/splashPage/splashPage.dart';
 import 'package:flutter_zlapp/Router/routes.dart';
 import 'package:flutter_zlapp/Tool/application/application.dart';
+import 'package:flutter_zlapp/Model/provider/faceManageModel.dart';
 void main() {
+  // 强制竖屏
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
   if (Platform.isAndroid) {
     /*控制状态栏底色*/
     SystemUiOverlayStyle systemUiOverlayStyle =
@@ -23,9 +29,8 @@ void main() {
   runApp(
     MultiProvider(
         providers: [
-          ChangeNotifierProvider<UserModel>(
-            builder: (_) => UserModel(),
-          ),
+          ChangeNotifierProvider<UserModel>(create:(_) => UserModel()),
+          ChangeNotifierProvider<FaceManageModel>(create:(_) => FaceManageModel()),
         ],
         child: MyApp(),
     ));

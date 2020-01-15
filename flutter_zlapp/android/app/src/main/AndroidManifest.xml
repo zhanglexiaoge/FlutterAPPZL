@@ -24,11 +24,13 @@
             <meta-data
                 android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
                 android:value="true" />
-            <uses-permission android:name="android.permission.INTERNET" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
     </application>
+    <!-- 所有的权限  如 定位 语音 相册等权限 全部写到这application同级  -->
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
