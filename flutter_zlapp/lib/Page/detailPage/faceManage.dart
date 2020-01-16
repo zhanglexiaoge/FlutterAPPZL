@@ -5,6 +5,10 @@ import 'package:flutter_zlapp/Page/Widget/cachedImage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_zlapp/Model/DeatilPage/detail_model_entity.dart';
 import 'package:flutter_zlapp/Model/provider/faceManageModel.dart';
+import 'package:flutter_zlapp/Eventbus/eventbus_list.dart';
+import 'package:fluro/fluro.dart';
+import 'package:flutter_zlapp/Tool/application/application.dart';
+import 'package:flutter_zlapp/Router/routes.dart';
 
 class FaceManageSet extends StatefulWidget {
   @override
@@ -15,6 +19,10 @@ class _FaceManageSetState extends State<FaceManageSet> {
   @override
   void initState() {
     super.initState();
+   //通过addPostFrameCallback可以做一些安全的操作，在有些时候是很有用的，它会在当前Frame绘制完后进行回调，并只会回调一次，如果要再次监听需要再设置。 比如本地数据加载后,网络数据更新
+//    WidgetsBinding.instance.addPostFrameCallback((_) {
+//
+//    });
   }
   @override
   Widget build(BuildContext context) {
@@ -30,7 +38,9 @@ class _FaceManageSetState extends State<FaceManageSet> {
               actions: <Widget>[
                 MaterialButton(
                   onPressed: () {
-
+                    //表情排序界面
+                    TransitionType transitionType = TransitionType.native;
+                    Application.router.navigateTo(context, Routes.facesequence,transition:transitionType);
                   },
                   child: Text("排序"),
                   highlightColor: Colours.color_ffff,
@@ -154,6 +164,7 @@ class _FaceManageSetState extends State<FaceManageSet> {
     await Future.delayed(Duration(milliseconds: 500));//等待500毫秒
     Provider.of<FaceManageModel>(context).listface.remove(dataModel);
     //全局监听 相当于通知
+    EventBusUtil().getEventBus().fire(EventbusremoveFace(dataModel.id.toString()));
     //EventBusUtil().getEventBus().fire(UpdateMoveFace(dataModel.id));
     //和原生交互
 //    ChannelUtil.communicateFunction(Channel.removeEmotions, {
@@ -165,3 +176,54 @@ class _FaceManageSetState extends State<FaceManageSet> {
 
 
 }
+
+
+//StatefulWidget 的生命周期比较复杂，依次为：
+//
+//createState
+//initState
+//didChangeDependencies
+//build
+//addPostFrameCallback
+//didUpdateWidget
+//deactivate
+//dispose
+
+//#### createState
+
+//createState 是 StatefulWidget 里创建 State 的方法，当要创建新的 StatefulWidget 的时候，会立即执行 createState，而且只执行一次，createState 必须要实现：
+//
+//
+//class MyScreen extends StatefulWidget {
+//  @override
+//  _MyScreenState createState() => _MyScreenState();
+//}
+
+//### initState
+//initState 是 StatefulWidget 创建完后调用的第一个方法，而且只执行一次，类似于 Android 的 onCreate、iOS 的 viewDidLoad()，所以在这里 View 并没有渲染，
+//但是这时 StatefulWidget 已经被加载到渲染树里了，这时 StatefulWidget 的 mount 的值会变为 true，直到 dispose 调用的时候才会变为 false。可以在 initState 里做一些初始化的操作。
+
+//@override
+//void initState() {
+//  super.initState();
+//  ...
+//}
+
+
+//####addPostFrameCallback
+//
+//addPostFrameCallback 是 StatefulWidge 渲染结束的回调，只会被调用一次，之后 StatefulWidget 需要刷新 UI 也不会被调用，addPostFrameCallback 的使用方法是在 initState 里添加回调：
+//import 'package:flutter/scheduler.dart';
+//@override
+//void initState() {
+//  super.initState();
+//  SchedulerBinding.instance.addPostFrameCallback((_) => {});
+//}
+
+//deactivate
+//
+//当要将 State 对象从渲染树中移除的时候，就会调用 deactivate 生命周期，这标志着 StatefulWidget 将要销毁，但是有时候 State 不会被销毁，而是重新插入到渲染树种。
+//
+//dispose
+//
+//当 View 不需要再显示，从渲染树中移除的时候，State 就会永久的从渲染树中移除，就会调用 dispose 生命周期，这时候就可以在 dispose 里做一些取消监听、动画的操作，和 initState 是相反的。

@@ -11,6 +11,8 @@ import 'package:flutter_zlapp/Tool/application/application.dart';
 import 'package:flutter_zlapp/Router/routes.dart';
 import 'package:flutter_zlapp/Model/provider/faceManageModel.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_zlapp/Eventbus/eventbus_list.dart';
+import 'dart:async';
 class DetailPage extends StatefulWidget {
   final String message;
   final Color color;
@@ -22,6 +24,9 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+
+  /*EventBus 监听*/
+  StreamSubscription _subscription;
 
   RefreshController _refreshController =
   RefreshController(initialRefresh: false);
@@ -43,10 +48,56 @@ class _DetailPageState extends State<DetailPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('message >>>> ' + widget.message);
-    print('color >>>> ' + widget.color.toString());
-    print('result >>>> ' + widget.result);
+//    print('message >>>> ' + widget.message);
+//    print('color >>>> ' + widget.color.toString());
+//    print('result >>>> ' + widget.result);
     loadfaceGroupList();
+    /**
+     * 监听广播（只监听ProductDetailEvent广播事件）
+     * 需要注意的是，如果不写尖括号里面的内容（<ProductDetailEvent>），那么表示监听所有广播
+     */
+   _subscription =  EventBusUtil().getEventBus().on<EventbusremoveFace>().listen((event){
+      updateDownload(event.faceid);
+    });
+
+    _subscription =  EventBusUtil().getEventBus().on<EventbusFaceReorder>().listen((event){
+      updateReorder(event.idList);
+    });
+
+  }
+  //移除某个表情
+  void updateDownload(String id) {
+    xList.forEach( (model) {
+      if(model.id.toString() == id && model.isInSticker == 1) {
+        model.isInSticker = 0;
+      }
+    });
+    setState(() {
+
+    });
+  }
+  //排序结果
+  void updateReorder(List<String > idList) {
+    print('idList >>>> ' +idList.toString());
+    for (int i = 0; i < idList.length; i++) {
+      String idString= idList[i];
+      xList.forEach( (model) {
+        if(model.id.toString() == idString && model.isInSticker == 1) {
+          model.directory = (i + 1).toString();
+        }
+      });
+    }
+    setState(() {
+
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    //dispose销毁方法里取消监听
+    _subscription.cancel();
   }
   @override
   Widget build(BuildContext context) {
@@ -71,9 +122,12 @@ class _DetailPageState extends State<DetailPage> {
                   tempList.add(model);
                 }
               });
+              //tempList 按照 directory 排序 升序
+              tempList.sort((a,b) =>a.directory.compareTo(b.directory));
               //FaceManageModel
               FaceManageModel facemodel = Provider.of<FaceManageModel>(context);
               facemodel.listface = tempList;
+              facemodel.update();
               //表情管理页面
               TransitionType transitionType = TransitionType.native;
               Application.router.navigateTo(context, Routes.facemanage,transition:transitionType);

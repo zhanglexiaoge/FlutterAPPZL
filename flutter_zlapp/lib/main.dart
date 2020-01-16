@@ -10,6 +10,7 @@ import 'package:flutter_zlapp/Page/splashPage/splashPage.dart';
 import 'package:flutter_zlapp/Router/routes.dart';
 import 'package:flutter_zlapp/Tool/application/application.dart';
 import 'package:flutter_zlapp/Model/provider/faceManageModel.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 void main() {
   // 强制竖屏
   SystemChrome.setPreferredOrientations([
@@ -43,6 +44,15 @@ class MyApp extends StatelessWidget {
        debugShowCheckedModeBanner: false,
        home: SplashPage(),
        onGenerateRoute: Application.router.generator,
+         localizationsDelegates: [
+           GlobalMaterialLocalizations.delegate,
+           GlobalWidgetsLocalizations.delegate,
+           GlobalCupertinoLocalizations.delegate,
+         ],
+         supportedLocales: [
+           const Locale('zh', 'CH'),
+           const Locale('en', 'US')
+         ]
      ),
       headerBuilder: () => ClassicHeader(
           height: 45.0,

@@ -5,6 +5,7 @@ import 'package:flutter_zlapp/Page/splashPage/splashPage.dart';
 import 'package:flutter_zlapp/Page/Login/login.dart';
 import 'package:flutter_zlapp/Tabar/tabar.dart';
 import 'package:flutter_zlapp/Page/detailPage/faceManage.dart';
+import 'package:flutter_zlapp/Page/detailPage/face_reorderable_set.dart';
 
 
 // splash 页面 广告页
@@ -36,4 +37,9 @@ var detailHandler = new Handler(
 var facemanageHandler = new Handler(
     handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
       return FaceManageSet();
+    });
+//跳转到表情排序页面 faceSequence
+var faceSequenceHandler = new Handler(
+    handlerFunc: (BuildContext context, Map<String, List<Object>> params) {
+      return FaceSequenceSet();
     });
