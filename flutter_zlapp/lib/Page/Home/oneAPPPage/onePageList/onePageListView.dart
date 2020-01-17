@@ -5,7 +5,7 @@ import 'package:flutter_zlapp/Tool/HTTP/HttpUtil.dart';
 import 'package:flutter_zlapp/Page/Home/oneAppModel/one_page_tool_bar_list_item_entity.dart';
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_zlapp/Tool/Utils.dart';
+import 'package:flutter_zlapp/Tool/application/application.dart';
 import 'package:flutter_zlapp/Tool/colors.dart';
 import 'package:flutter_cupertino_date_picker/flutter_cupertino_date_picker.dart';
 class OnePageListView extends StatefulWidget {
@@ -182,9 +182,8 @@ class _OnePageListViewState extends State<OnePageListView> {
 
 class onePageToolBarListItem extends StatelessWidget {
   List<OnePageToolBarListItemData> _data;
-
   onePageToolBarListItem(this._data);
-  double itemWidth = (Utils.width - 45) / 2;
+  double itemWidth = (Application.screenWidth - 45) / 2;
   Widget getItemWidget(OnePageToolBarListItemData item, BuildContext context) {
      return DecoratedBox(
       decoration: BoxDecoration(

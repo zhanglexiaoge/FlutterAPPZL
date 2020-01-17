@@ -8,6 +8,11 @@ import 'package:provider/provider.dart';
 import 'package:flutter_zlapp/Tool/CustomDialog/LoadingDialog.dart';
 import 'package:flutter_zlapp/Tool/application/application.dart';
 import 'package:flutter_zlapp/Router/routes.dart';
+import 'package:flutter_zlapp/Tool/objectisEmpty.dart';
+import 'package:flutter/foundation.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
+import 'package:flutter_zlapp/Tool/toastUtil.dart';
+
 
 class LoginView extends StatefulWidget {
   @override
@@ -16,22 +21,15 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
 
-  FocusNode usernameFocusNode = new FocusNode();
-  FocusNode passwordFocusNode = new FocusNode();
-  FocusNode verifyFocusNode = new FocusNode();
-
-
-
   //controller常用于赋值和取值操作
   TextEditingController _usernameEtController = TextEditingController();
   TextEditingController _passwordEtController = TextEditingController();
   TextEditingController _verifyEtController = TextEditingController();
 
-  //表单状态
-  GlobalKey _formKey = GlobalKey();
-  String userName = '' ;
-  String password = '' ;
-  String verify = '';
+  FocusNode usernameFocusNode = new FocusNode();
+  FocusNode passwordFocusNode = new FocusNode();
+  FocusNode verifyFocusNode = new FocusNode();
+
   var _isShowClear = false;//密码是否显示输入框尾部的清除按钮
 
   bool isButtonEnable = true;  //按钮状态 是否可点击
@@ -44,114 +42,61 @@ class _LoginViewState extends State<LoginView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //设置焦点监听
-    usernameFocusNode.addListener(_focusNodeListener);
-    passwordFocusNode.addListener(_focusNodeListener);
-    verifyFocusNode.addListener(_focusNodeListener);
-    //监听文本变化方式②设置controller并实现监听
-    _usernameEtController.addListener(() {
-      userName = _usernameEtController.text;
-      _updateAllViewState();
-    });
-
-    _passwordEtController.addListener(() {
-      password = _passwordEtController.text;
-      if(password.length > 0) {
-        _isShowClear = true;
-      }else {
-        _isShowClear = false;
-      }
-      _updateAllViewState();
-    });
-
-    _verifyEtController.addListener(() {
-      verify = _verifyEtController.text;
-      _updateAllViewState();
-    });
+    //监听输入改变
+    _usernameEtController.addListener(_verify);
+    _passwordEtController.addListener(_verify);
+    _verifyEtController.addListener(_verify);
 
   }
 
-  //设置登录按钮状态
-  void _updateAllViewState() {
-    if(userName.length > 0 && password.length > 0 && verify.length > 0) {
-      isLoginEnable = true;
+  void _verify() {
+    String name =  _usernameEtController.text;
+    String passwordStr = _passwordEtController.text;
+    String verifyStr = _verifyEtController.text;
+    bool isClick = false;
+    if(!ObjectUtil.isEmptyString(name) && !ObjectUtil.isEmptyString(passwordStr)  && !ObjectUtil.isEmptyString(verifyStr)) {
+      isClick = true;
     }else {
-      isLoginEnable = false;
+      isClick = false;
     }
-    setState(() {});
-  }
-
-  // 监听焦点
-  Future _focusNodeListener() async{
-    if(usernameFocusNode.hasFocus){
-      // 取消密码框 验证码的焦点状态
-      passwordFocusNode.unfocus();
-      verifyFocusNode.unfocus();
+    /// 状态不一样在刷新，避免重复不必要的setState
+    if (isClick != isLoginEnable) {
+      setState(() {
+        isLoginEnable = isClick;
+      });
     }
-    if (passwordFocusNode.hasFocus) {
-      // 取消用户名 验证码 框焦点状态
-      usernameFocusNode.unfocus();
-      verifyFocusNode.unfocus();
-    }
-    if(verifyFocusNode.hasFocus){
-      // 取消密码框 用户名的焦点状态
-      passwordFocusNode.unfocus();
-      usernameFocusNode.unfocus();
-    }
-
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     // 移除焦点监听
-    usernameFocusNode.removeListener(_focusNodeListener);
-    passwordFocusNode.removeListener(_focusNodeListener);
-    verifyFocusNode.removeListener(_focusNodeListener);
     _usernameEtController.dispose();
     _passwordEtController.dispose();
     _verifyEtController.dispose();
     super.dispose();
   }
-
+ //ios FormKeyboardActions第一次关闭 项目是在 最外层包裹一层，点击的时候进行关闭，
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.center, //指定未定位或部分定位widget的对齐方式
-        children: <Widget>[
-          GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-            },
-            child: ListView(
-              children: loginWidgets(context),
-            ),
-          ),
-        ],
+      body:  defaultTargetPlatform == TargetPlatform.iOS ? FormKeyboardActions(
+        child: _buildBody(),
+      ) : SingleChildScrollView(
+        child: _buildBody(),
       ),
     );
   }
 
-    // 登录页视图
-    List<Widget> loginWidgets(BuildContext context) {
-      MediaQueryData mediaQuery = MediaQuery.of(context);
-      double screenHeight = mediaQuery.size.height;
-      double loginIconTop = screenHeight <= 667 ? 80 : 106;
-      double loginIconBottom = screenHeight <= 667 ? 50 : 71;
-      return <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: loginIconTop),
-              child: loginIconImage(),
-            ),
-          ],
+  _buildBody() {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: Application.screenHeight <= 667 ? 80 : 106 ),
+          child: loginIconImage(),
         ),
         Padding(
-          padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
+          padding: EdgeInsets.only(top: Application.screenHeight <= 667 ? 40 : 55, left: 25, right: 25),
           child: userNameTextField(),
         ),
         Padding(
@@ -169,7 +114,7 @@ class _LoginViewState extends State<LoginView> {
             Padding(
               padding: const EdgeInsets.only(top: 20, right: 15),
               child: sendverifyButton(),
-             ),
+            ),
           ],
         ),
         Padding(
@@ -181,30 +126,32 @@ class _LoginViewState extends State<LoginView> {
                 flex: 1,
                 //child: loginButton(),
                 child: Consumer<UserModel>(
-                   builder: (BuildContext context, UserModel value, Widget child) {
-                     return  FlatButton(
-                       disabledColor: Colors.blue.withOpacity(0.1),  //按钮禁用时的颜色
-                       disabledTextColor: Colors.black,     //按钮禁用时的文本颜色
-                       textColor:isLoginEnable?Colors.white:Colors.black.withOpacity(0.2),       //文本颜色
-                       color: isLoginEnable ?Color(0xff44c5fe):Colors.grey.withOpacity(0.1),       //按钮的颜色
-                       splashColor: isLoginEnable?Colors.white.withOpacity(0.1):Colors.transparent,
-                       shape: StadiumBorder(side: BorderSide.none),
-                       onPressed: (){
-                         usernameFocusNode.unfocus();
-                         passwordFocusNode.unfocus();
-                         verifyFocusNode.unfocus();
-                         loginAction(context,value);
-                       },
-                       child: Text('登录',style: TextStyle(fontSize: 13,),),
-                     );
-                   },
+                  builder: (BuildContext context, UserModel value, Widget child) {
+                    return  FlatButton(
+                      disabledColor: Colors.blue.withOpacity(0.1),  //按钮禁用时的颜色
+                      disabledTextColor: Colors.black,     //按钮禁用时的文本颜色
+                      textColor:isLoginEnable?Colors.white:Colors.black.withOpacity(0.2),       //文本颜色
+                      color: isLoginEnable ?Color(0xff44c5fe):Colors.grey.withOpacity(0.1),       //按钮的颜色
+                      splashColor: isLoginEnable?Colors.white.withOpacity(0.1):Colors.transparent,
+                      shape: StadiumBorder(side: BorderSide.none),
+                      onPressed: (){
+                        usernameFocusNode.unfocus();
+                        passwordFocusNode.unfocus();
+                        verifyFocusNode.unfocus();
+                        loginAction(context,value);
+                      },
+                      child: Text('登录',style: TextStyle(fontSize: 13,),),
+                    );
+                  },
                 ),
               ),
             ],
           ),
         ),
-      ];
-    }
+      ],
+    );
+
+  }
 
   Image loginIconImage() {
     return Image(
@@ -230,19 +177,7 @@ class _LoginViewState extends State<LoginView> {
         //decoration 为边框修饰，可以借此来调整 TextField 展示效果；可以设置前置图标，后置图片，边框属性，内容属性等，会在后续集中尝试；若要完全删除装饰，将 decoration 设置为空即可
         decoration:InputDecoration(
           icon:new Image.asset('assets/images/login_icon_id@2x.png',width: 20, height: 20),
-//          labelText: "用户名",
-//          hasFloatingPlaceholder: false, //labelText是否浮动，默认为true，修改为false则labelText在输入框获取焦点时不会浮动且不显示 l
-//          helperText: "用户名为手机号",
-//          helperStyle: TextStyle(
-//            color: Colors.red,//绿色
-//            fontSize: 15,//字体变大
-//          ),
           hintText: "用户名",
- //         errorText: "用户名格式不正确",//错误提示信息，如果该属性不为null的话，labelText失效。
-//          prefixIcon、prefixText 图片和预填充的文字
-//          prefixIcon: Icon(Icons.perm_identity),
-//          prefixText: "prefixText",
-            //未选中
             enabledBorder: UnderlineInputBorder(
               /*边角*/
               borderRadius: BorderRadius.all(
@@ -304,9 +239,6 @@ class _LoginViewState extends State<LoginView> {
             ),
           ),
       ),
-      onChanged: (value){
-        //print("----------------输入框中内容为:$value--");
-      },
     );
   }
 
@@ -327,17 +259,8 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _buttonClickverify(){
-    if(userName.length > 0 && password.length > 0 ) {
-      setState(() {
-        if(isButtonEnable){   //当按钮可点击时
-          isButtonEnable = false; //按钮状态标记
-          _initTimer();
-          sendSmsAction();
-        }
-      });
-    }else {
-      print('用户名密码不能为空');
-    }
+    _initTimer();
+    sendSmsAction();
   }
   //初始化定时器
   void _initTimer() {
@@ -392,7 +315,10 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> loginAction( BuildContext context, UserModel value ) async {
     Loading.showLoading(context);
-    value.login(context, userName, password, verify).then((loginModel) {
+    String name =  _usernameEtController.text;
+    String passwordStr = _passwordEtController.text;
+    String verifyStr = _passwordEtController.text;
+    value.login(context, name, passwordStr, verifyStr).then((loginModel) {
       Loading.hideLoading(context);
       if(value != null){
         //Provider.of<PlayListModel>(context).user = value;
@@ -405,15 +331,14 @@ class _LoginViewState extends State<LoginView> {
     });
   }
 
-
-
-
   Future<void> sendSmsAction() async {
-    Map<String, dynamic> params = {"username": userName,"password":password};
+    String name =  _usernameEtController.text;
+    String passwordStr = _passwordEtController.text;
+    Map<String, dynamic> params = {"username": name,"password":passwordStr};
     HttpUtil.instance.post(sendSms,params: params).then((data) {
       print('data: ' + data.toString());
     },onError: (error){
-
+      ToastUtil.text(error);
     });
   }
 

@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_zlapp/Model/logIn/login_model_entity.dart';
-import 'package:flutter_zlapp/Tool/application/application.dart';
 import 'package:flutter_zlapp/Tool/HTTP/HttpUtil.dart';
 import 'package:flutter_zlapp/Config/serviceUrl.dart';
+import 'package:flutter_zlapp/Tool/Utils.dart';
 
 
 class UserModel with ChangeNotifier {
@@ -11,9 +11,9 @@ class UserModel with ChangeNotifier {
   LoginModelEntity get loginModel => _loginModel;
   // 初始化 loginModel
   void initLoginModel() {
-    if (Application.spstance.containsKey('loginfo')) {
+    if (Utils.haveKey('loginfo')) {
       //获取本地存储的登录信息
-      String _loginfoTemp = Application.spstance.getString('loginfo');
+      String _loginfoTemp =  Utils.getString('loginfo');
       _loginModel = LoginModelEntity.fromJson(json.decode(_loginfoTemp));
     }
   }
@@ -29,7 +29,7 @@ class UserModel with ChangeNotifier {
     /// 保存用户信息到 sp
      _saveUserInfo(LoginModelEntity user){
       _loginModel = user;
-      Application.spstance.setString('loginfo', json.encode(user.toJson()));
+      Utils.putString('loginfo', json.encode(user.toJson()));
     }
 
 }

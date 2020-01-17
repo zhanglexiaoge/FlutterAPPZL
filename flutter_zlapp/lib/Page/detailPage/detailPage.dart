@@ -13,8 +13,6 @@ import 'package:flutter_zlapp/Model/provider/faceManageModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_zlapp/Eventbus/eventbus_list.dart';
 import 'dart:async';
-import 'package:provider/provider.dart';
-import 'package:flutter_zlapp/Model/provider/faceManageModel.dart';
 class DetailPage extends StatefulWidget {
   final String message;
   final Color color;

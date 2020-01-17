@@ -249,13 +249,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.5.4"
-  flutter_spinkit:
-    dependency: "direct main"
-    description:
-      name: flutter_spinkit
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.1.0"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
@@ -373,6 +366,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.3.19"
+  keyboard_actions:
+    dependency: "direct main"
+    description:
+      name: keyboard_actions
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.2"
   logging:
     dependency: transitive
     description:

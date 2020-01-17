@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_zlapp/Tool/application/application.dart';
+import 'package:flutter_zlapp/Tool/Utils.dart';
 import 'package:flutter_zlapp/Page/Login/login.dart';
 class MinePage extends StatefulWidget {
   @override
@@ -25,7 +25,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin 
                   color: Color(0xff44c5fe),       //按钮的颜色
                   onPressed: (){
                     //退出登录
-                   Application.spstance.remove('loginfo');
+                    Utils.remove('loginfo');
                    Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => LoginView()), (route) => route == null);
                   },
                   child: Text('退出登录',style: TextStyle(fontSize: 13,),),

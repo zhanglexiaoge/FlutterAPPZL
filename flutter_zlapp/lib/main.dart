@@ -12,6 +12,7 @@ import 'package:flutter_zlapp/Tool/application/application.dart';
 import 'package:flutter_zlapp/Model/provider/faceManageModel.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:oktoast/oktoast.dart';
+import 'package:flutter_zlapp/Model/provider/theme_provider.dart';
 void main() {
   // 强制竖屏
   SystemChrome.setPreferredOrientations([
@@ -40,21 +41,27 @@ class MyApp extends StatelessWidget {
          providers: [
            ChangeNotifierProvider<UserModel>(create:(_) => UserModel()),
            ChangeNotifierProvider<FaceManageModel>(create:(_) => FaceManageModel()),
+           ChangeNotifierProvider<ThemeProvider>(create:(_) => ThemeProvider()),
          ],
-         child:  MaterialApp(
-             debugShowCheckedModeBanner: false,
-             home: SplashPage(),
-             onGenerateRoute: Application.router.generator,
-             localizationsDelegates: [
-               GlobalMaterialLocalizations.delegate,
-               GlobalWidgetsLocalizations.delegate,
-               GlobalCupertinoLocalizations.delegate,
-             ],
-             supportedLocales: [
-               const Locale('zh', 'CH'),
-               const Locale('en', 'US')
-             ]
-         ),
+          child:  Consumer(
+            builder: (context,ThemeProvider provider,_) => MaterialApp(
+                theme: provider.getTheme(),
+                darkTheme: provider.getTheme(isDarkMode: true),
+                themeMode: provider.getThemeMode(),
+                debugShowCheckedModeBanner: false,
+                home: SplashPage(),
+                onGenerateRoute: Application.router.generator,
+                localizationsDelegates: [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: [
+                  const Locale('zh', 'CH'),
+                  const Locale('en', 'US')
+                ]
+            ),
+          ),
        ),
      ),
       headerBuilder: () => ClassicHeader(

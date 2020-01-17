@@ -165,8 +165,6 @@ class HttpUtil {
 
   /// 数据处理
   Future <Map<String, dynamic>> handleDataSource(Response response,String method, {String url = ""}) {
-    ResultData resultData;
-    String errorMsg = "";
     int statusCode;
     statusCode = response.statusCode;
     printLog("$_TAG statusCode:" + statusCode.toString());
@@ -186,6 +184,15 @@ class HttpUtil {
       data = json.decode(response.data);
     }
 
+    //处理接口返回失败情况
+    //hantalk
+    if (data.containsKey("code")) {
+      if (data["code"] != 200) {
+        return Future.error(data["message"]);
+      }
+    }
+
+
     printBigLog("$_TAG data: ", json.encode(data));
 
     //处理错误部分
@@ -202,6 +209,9 @@ class HttpUtil {
     }else {
       return Future.error(response.statusMessage);
     }
+
+
+
 
 
 
