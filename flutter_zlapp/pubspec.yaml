@@ -57,10 +57,13 @@ dependencies:
   fluro: ^1.5.1
   #拖拽排序
   reorderables: ^0.2.12
-#  # https://github.com/ReactiveX/rxdart
-#  rxdart: ^0.22.5
-#  # 侧滑删除 https://github.com/letsar/flutter_slidable
-#  flutter_slidable: ^0.5.4
+  # https://github.com/ReactiveX/rxdart
+  rxdart: ^0.22.5
+  # 侧滑删除 https://github.com/letsar/flutter_slidable
+  flutter_slidable: ^0.5.4
+  #OKToast 是一款 在 flutter 上 使用的 toast 插件
+  #使用简单, 可定制性强, 纯 flutter, 调用不用 context
+  oktoast: ^2.1.8
 
   
   #弹出框 例如错误信息

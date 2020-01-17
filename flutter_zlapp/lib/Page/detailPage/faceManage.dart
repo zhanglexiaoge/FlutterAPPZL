@@ -57,8 +57,7 @@ class _FaceManageSetState extends State<FaceManageSet> {
     );
   }
   Widget bodyView(BuildContext context) {
-    FaceManageModel _provider = Provider.of<FaceManageModel>(context);
-    return new Container(
+    return Consumer(builder: (context, FaceManageModel _provider, _) => new Container(
       color: Colours.color_f9f9,
       child:CustomScrollView(
           slivers: <Widget>[
@@ -130,7 +129,7 @@ class _FaceManageSetState extends State<FaceManageSet> {
           ],
         ),
 
-    );
+    ),);
   }
 
   Widget imageViewWidget(String url) {

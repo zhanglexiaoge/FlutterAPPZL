@@ -13,6 +13,8 @@ import 'package:flutter_zlapp/Model/provider/faceManageModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_zlapp/Eventbus/eventbus_list.dart';
 import 'dart:async';
+import 'package:provider/provider.dart';
+import 'package:flutter_zlapp/Model/provider/faceManageModel.dart';
 class DetailPage extends StatefulWidget {
   final String message;
   final Color color;
@@ -100,8 +102,11 @@ class _DetailPageState extends State<DetailPage> {
     _subscription.cancel();
   }
   @override
+
+
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Consumer(
+        builder: (context,FaceManageModel provider,_) => new Scaffold(
       appBar: new AppBar(
         title: const Text('表情商店'),
         leading: IconButton(
@@ -124,10 +129,8 @@ class _DetailPageState extends State<DetailPage> {
               });
               //tempList 按照 directory 排序 升序
               tempList.sort((a,b) =>a.directory.compareTo(b.directory));
-              //FaceManageModel
-              FaceManageModel facemodel = Provider.of<FaceManageModel>(context);
-              facemodel.listface = tempList;
-              facemodel.update();
+              provider.listface = tempList;
+              provider.update();
               //表情管理页面
               TransitionType transitionType = TransitionType.native;
               Application.router.navigateTo(context, Routes.facemanage,transition:transitionType);
@@ -136,7 +139,7 @@ class _DetailPageState extends State<DetailPage> {
         ],
       ),
       body: bodyView(context),
-    );
+    ));
   }
 
   Widget bodyView(BuildContext context) {
