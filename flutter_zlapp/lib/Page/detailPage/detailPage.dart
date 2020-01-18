@@ -106,9 +106,9 @@ class _DetailPageState extends State<DetailPage> {
     return Consumer(
         builder: (context,FaceManageModel provider,_) => new Scaffold(
       appBar: new AppBar(
-        title: const Text('表情商店'),
+        title: Text('表情商店',style: TextStyle(fontSize: 14, color: Colours.color_9999),),
         leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: Icon(Icons.arrow_back_ios,color: Colours.color_3333,),
             onPressed: () {
               Navigator.pop(context,widget.result);
             }),
